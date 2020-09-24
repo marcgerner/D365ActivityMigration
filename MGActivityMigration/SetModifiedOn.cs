@@ -24,40 +24,39 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
 
             try
             {
-                tracer.Trace("Plugin gestart");
+                tracer.Trace("Plugin started");
 
                 Entity entity = (Entity)context.InputParameters["Target"];
-                tracer.Trace("Entiteit gevonden");
+                tracer.Trace("entity found");
 
                 if (context.PreEntityImages.Contains("preImage"))
                 {
                     Entity preImageEntity = context.PreEntityImages["preImage"];
-                    tracer.Trace("preImage gevonden");
+                    tracer.Trace("preImage found");
 
                     if (preImageEntity.Contains("dnbs_overriddenmodifiedon"))
                     {
-                        tracer.Trace("dnbs_OverridenModifiedOn bevat geen gegevens, " + preImageEntity["dnbs_overriddenmodifiedon"]);
+                        tracer.Trace("dnbs_OverridenModifiedOn contains no data, " + preImageEntity["dnbs_overriddenmodifiedon"]);
 
                         entity["modifiedon"] = preImageEntity["dnbs_overriddenmodifiedon"];
-                        tracer.Trace("ModifiedOn overschreven met dnbs_OverridenModifiedOn");
+                        tracer.Trace("ModifiedOn overwritten with dnbs_OverridenModifiedOn");
                     }
                 }
                 else
                 {
-
                     if (entity.Attributes.Contains("dnbs_overriddenmodifiedon") && entity.Attributes.Contains("modifiedon") == false)
                     {
-                        tracer.Trace("ModifiedOn bevat geen gegevens");
+                        tracer.Trace("ModifiedOn contains no data");
 
                         entity.Attributes.Add("modifiedon", entity["dnbs_overriddenmodifiedon"]);
-                        tracer.Trace("ModifiedOn gevuld met dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
+                        tracer.Trace("ModifiedOn filled with dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
                     }
                     else if (entity.Attributes.Contains("dnbs_overriddenmodifiedon") && entity.Attributes.Contains("modifiedon"))
                     {
-                        tracer.Trace("ModifiedOn bevat al gegevens");
+                        tracer.Trace("ModifiedOn already contains data");
 
                         entity["modifiedon"] = entity["dnbs_overriddenmodifiedon"];
-                        tracer.Trace("ModifiedOn overschreven met dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
+                        tracer.Trace("ModifiedOn overwritten with dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
                     }
                 }
             }

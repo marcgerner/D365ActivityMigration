@@ -25,19 +25,19 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
             try
             {
                 Entity entity = (Entity)context.InputParameters["Target"];
-                tracer.Trace("Entiteit gevonden");
+                tracer.Trace("entity found");
 
                 if (context.PreEntityImages.Contains("preImage"))
                 {
                     Entity preImageEntity = context.PreEntityImages["preImage"];
-                    tracer.Trace("preImage gevonden");
+                    tracer.Trace("preImage found");
 
                     if (preImageEntity.Contains("modifiedby") && preImageEntity.Contains("dnbs_overriddenmodifiedby"))
                     {
-                        tracer.Trace("dnbs_overriddenmodifiedby heeft als waarde: " + preImageEntity["dnbs_overriddenmodifiedby"]);
+                        tracer.Trace("dnbs_overriddenmodifiedby has a value: " + preImageEntity["dnbs_overriddenmodifiedby"]);
 
                         entity["modifiedby"] = preImageEntity["dnbs_overriddenmodifiedby"];
-                        tracer.Trace("modifiedby overschreven met dnbs_overriddenmodifiedby");
+                        tracer.Trace("modifiedby overwritten with dnbs_overriddenmodifiedby");
                     }
                 }
             }
