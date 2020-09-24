@@ -29,11 +29,11 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                 {
                     string attributeName = entity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddencreatedby");
 
-                    if (entity.Contains(attributeName))
+                    if (attributeName != null && entity.Contains(attributeName))
                     {
-                        tracer.Trace($"{attributeName} has a value: {entity[attributeName]}");
+                        tracer.Trace($"{attributeName} has value: {(entity[attributeName] as EntityReference)?.Name} | {(entity[attributeName] as EntityReference)?.Id}");
 
-                        entity["createdby"] = entity["dnbs_overriddencreatedby"];
+                        entity["createdby"] = entity[attributeName];
                         tracer.Trace($"createdby overwritten with {attributeName}");
                     }
                 }

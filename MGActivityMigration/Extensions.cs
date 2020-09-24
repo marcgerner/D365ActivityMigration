@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Xrm.Sdk;
 
 namespace DeltaN.BusinessSolutions.ActivityMigration
@@ -11,7 +12,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
         /// <returns>the logical name of the attribute or null</returns>
         public static string GetAttributeNameThatEndsBy(this AttributeCollection attributeCollection, ITracingService tracer, string value)
         {
-            string attributeName = attributeCollection.Keys.FirstOrDefault(x => x.EndsWith(value));
+            string attributeName = attributeCollection.Keys.FirstOrDefault(x => x.EndsWith(value, StringComparison.InvariantCultureIgnoreCase));
             string message = attributeName == null
                 ? $"no attribute found that ends with \"{value}\""
                 : $"attribute found: \"{attributeName}\"";

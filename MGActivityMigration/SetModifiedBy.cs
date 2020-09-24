@@ -34,7 +34,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                     
                     if (attributeName != null && preImageEntity.Contains("modifiedby") && preImageEntity.Contains(attributeName))
                     {
-                        tracer.Trace($"{attributeName} has value: {preImageEntity[attributeName]}");
+                        tracer.Trace($"{attributeName} has value: {(preImageEntity[attributeName] as EntityReference)?.Name} | {(preImageEntity[attributeName] as EntityReference)?.Id}");
                         entity["modifiedby"] = preImageEntity[attributeName];
                         tracer.Trace($"modifiedby overwritten with {attributeName}");
                     }

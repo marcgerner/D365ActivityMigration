@@ -25,8 +25,6 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
 
             try
             {
-                tracer.Trace("Plugin started");
-                
                 if (context.InputParameters["Target"] is Entity entity)
                 {
                     if (context.PreEntityImages.Contains("preImage"))
