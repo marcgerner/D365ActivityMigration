@@ -33,7 +33,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                     {
                         Entity preImageEntity = context.PreEntityImages["preImage"];
 
-                        var attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
+                        string attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
 
                         if (attributeName != null && preImageEntity.Contains(attributeName))
                         {
@@ -45,7 +45,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                     }
                     else
                     {
-                        var attributeName = entity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
+                        string attributeName = entity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
 
                         if (attributeName != null)
                         {

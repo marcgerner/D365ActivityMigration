@@ -30,7 +30,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                 {
                     Entity preImageEntity = context.PreEntityImages["preImage"];
 
-                    var attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedby");
+                    string attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedby");
                     
                     if (attributeName != null && preImageEntity.Contains("modifiedby") && preImageEntity.Contains(attributeName))
                     {
