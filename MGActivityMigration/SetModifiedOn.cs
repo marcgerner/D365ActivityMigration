@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+
 using System;
 
 namespace DeltaN.BusinessSolutions.ActivityMigration
@@ -25,44 +26,51 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
             try
             {
                 tracer.Trace("Plugin started");
-
-                Entity entity = (Entity)context.InputParameters["Target"];
-                tracer.Trace("entity found");
-
-                if (context.PreEntityImages.Contains("preImage"))
+                
+                if (context.InputParameters["Target"] is Entity entity)
                 {
-                    Entity preImageEntity = context.PreEntityImages["preImage"];
-                    tracer.Trace("preImage found");
-
-                    if (preImageEntity.Contains("dnbs_overriddenmodifiedon"))
+                    if (context.PreEntityImages.Contains("preImage"))
                     {
-                        tracer.Trace("dnbs_OverridenModifiedOn contains no data, " + preImageEntity["dnbs_overriddenmodifiedon"]);
+                        Entity preImageEntity = context.PreEntityImages["preImage"];
 
-                        entity["modifiedon"] = preImageEntity["dnbs_overriddenmodifiedon"];
-                        tracer.Trace("ModifiedOn overwritten with dnbs_OverridenModifiedOn");
+                        var attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
+
+                        if (attributeName != null && preImageEntity.Contains(attributeName))
+                        {
+                            tracer.Trace($"{attributeName} contains no data, {preImageEntity[attributeName]}");
+
+                            entity["modifiedon"] = preImageEntity[attributeName];
+                            tracer.Trace($"modifiedon overwritten with {attributeName}");
+                        }
                     }
-                }
-                else
-                {
-                    if (entity.Attributes.Contains("dnbs_overriddenmodifiedon") && entity.Attributes.Contains("modifiedon") == false)
+                    else
                     {
-                        tracer.Trace("ModifiedOn contains no data");
+                        var attributeName = entity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedon");
 
-                        entity.Attributes.Add("modifiedon", entity["dnbs_overriddenmodifiedon"]);
-                        tracer.Trace("ModifiedOn filled with dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
-                    }
-                    else if (entity.Attributes.Contains("dnbs_overriddenmodifiedon") && entity.Attributes.Contains("modifiedon"))
-                    {
-                        tracer.Trace("ModifiedOn already contains data");
+                        if (attributeName != null)
+                        {
+                            if (entity.Attributes.Contains(attributeName) &&
+                                entity.Attributes.Contains("modifiedon") == false)
+                            {
+                                tracer.Trace("modifiedon contains no data");
 
-                        entity["modifiedon"] = entity["dnbs_overriddenmodifiedon"];
-                        tracer.Trace("ModifiedOn overwritten with dnbs_OverridenModifiedOn, " + entity["dnbs_overriddenmodifiedon"]);
+                                entity.Attributes.Add("modifiedon", entity[attributeName]);
+                                tracer.Trace($"modifiedon filled with {attributeName}, {entity[attributeName]}");
+                            }
+                            else if (entity.Attributes.Contains(attributeName) && entity.Attributes.Contains("modifiedon"))
+                            {
+                                tracer.Trace("modifiedon already contains data");
+
+                                entity["modifiedon"] = entity[attributeName];
+                                tracer.Trace($"modifiedon overwritten with {attributeName}, {entity[attributeName]}");
+                            }
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                throw new InvalidPluginExecutionException(e.Message);
+                throw new InvalidPluginExecutionException(exception.Message, exception);
             }
         }
     }

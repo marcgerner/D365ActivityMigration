@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
+
 using System;
+using System.Linq;
 
 namespace DeltaN.BusinessSolutions.ActivityMigration
 {
@@ -24,26 +26,23 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
 
             try
             {
-                Entity entity = (Entity)context.InputParameters["Target"];
-                tracer.Trace("entity found");
-
-                if (context.PreEntityImages.Contains("preImage"))
+                if (context.InputParameters["Target"] is Entity entity && context.PreEntityImages.Contains("preImage"))
                 {
                     Entity preImageEntity = context.PreEntityImages["preImage"];
-                    tracer.Trace("preImage found");
 
-                    if (preImageEntity.Contains("modifiedby") && preImageEntity.Contains("dnbs_overriddenmodifiedby"))
+                    var attributeName = preImageEntity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddenmodifiedby");
+                    
+                    if (attributeName != null && preImageEntity.Contains("modifiedby") && preImageEntity.Contains(attributeName))
                     {
-                        tracer.Trace("dnbs_overriddenmodifiedby has a value: " + preImageEntity["dnbs_overriddenmodifiedby"]);
-
-                        entity["modifiedby"] = preImageEntity["dnbs_overriddenmodifiedby"];
-                        tracer.Trace("modifiedby overwritten with dnbs_overriddenmodifiedby");
+                        tracer.Trace($"{attributeName} has value: {preImageEntity[attributeName]}");
+                        entity["modifiedby"] = preImageEntity[attributeName];
+                        tracer.Trace($"modifiedby overwritten with {attributeName}");
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                throw new InvalidPluginExecutionException(e.Message);
+                throw new InvalidPluginExecutionException(exception.Message, exception);
             }
         }
     }

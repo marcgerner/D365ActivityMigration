@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+
 using System;
 
 namespace DeltaN.BusinessSolutions.ActivityMigration
@@ -24,20 +25,22 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
 
             try
             {
-                Entity entity = (Entity)context.InputParameters["Target"];
-                tracer.Trace("entity found");
-
-                if (entity.Contains("createdby") && entity.Contains("dnbs_overriddencreatedby"))
+                if (context.InputParameters["Target"] is Entity entity && entity.Contains("createdby"))
                 {
-                    tracer.Trace("dnbs_overriddencreatedby has a value: " + entity["dnbs_overriddencreatedby"]);
+                    var attributeName = entity.Attributes.GetAttributeNameThatEndsBy(tracer, "_overriddencreatedby");
 
-                    entity["createdby"] = entity["dnbs_overriddencreatedby"];
-                    tracer.Trace("createdby overwritten with dnbs_overriddencreatedby");
+                    if (entity.Contains(attributeName))
+                    {
+                        tracer.Trace($"{attributeName} has a value: {entity[attributeName]}");
+
+                        entity["createdby"] = entity["dnbs_overriddencreatedby"];
+                        tracer.Trace($"createdby overwritten with {attributeName}");
+                    }
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                throw new InvalidPluginExecutionException(e.Message);
+                throw new InvalidPluginExecutionException(exception.Message, exception);
             }
         }
     }
