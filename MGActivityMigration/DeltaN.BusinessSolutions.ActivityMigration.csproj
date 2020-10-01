@@ -60,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnnotationDto.cs" />
+    <Compile Include="AnnotationSetUpdatedByAndUpdatedOn.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -67,6 +69,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="AnnotationSetCreatedBy.cs" />
     <Compile Include="SetCreatedBy.cs" />
     <Compile Include="SetModifiedBy.cs" />
     <Compile Include="SetModifiedOn.cs" />
