@@ -10,16 +10,13 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
     internal class AnnotationDto
     {
         [DataMember]
-        internal string notetext;
-
-        [DataMember]
-        internal DateTime createdon;
-
-        [DataMember]
-        internal DateTime modifiedon;
+        internal string originalfieldvalue;
 
         [DataMember]
         internal Guid createdby;
+
+        [DataMember]
+        internal DateTime modifiedon;
 
         [DataMember]
         internal Guid modifiedby;

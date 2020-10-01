@@ -33,7 +33,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                         var annotationDto = AnnotationDto.ParseJson(notetext);
                         tracer.Trace(notetext);
                         entity["createdby"] = new EntityReference("systemuser", annotationDto.createdby);
-                        entity["notetext"] = annotationDto.notetext;
+                        entity["notetext"] = annotationDto.originalfieldvalue;
                     }
                 }
             }
