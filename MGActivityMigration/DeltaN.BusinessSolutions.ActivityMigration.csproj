@@ -60,7 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnnotationDto.cs" />
+    <Compile Include="DataTransferObject.cs" />
+    <Compile Include="PostSetCreatedBy.cs" />
     <Compile Include="AnnotationSetModifiedByAndModifiedOn.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

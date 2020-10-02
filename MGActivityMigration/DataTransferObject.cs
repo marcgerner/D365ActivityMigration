@@ -7,13 +7,16 @@ using System.Text;
 namespace DeltaN.BusinessSolutions.ActivityMigration
 {
     [DataContract]
-    internal class AnnotationDto
+    internal class DataTransferObject
     {
         [DataMember]
         internal string originalfieldvalue;
 
         [DataMember]
         internal Guid createdby;
+
+        [DataMember]
+        internal DateTime createdon;
 
         [DataMember]
         internal DateTime modifiedon;
@@ -25,19 +28,19 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
         {
             
             var memoryStream = new MemoryStream();
-            var jsonSerializer = new DataContractJsonSerializer(typeof(AnnotationDto));
+            var jsonSerializer = new DataContractJsonSerializer(typeof(DataTransferObject));
             jsonSerializer.WriteObject(memoryStream, this);
             byte[] json = memoryStream.ToArray();
             memoryStream.Close();
             return Encoding.UTF8.GetString(json, 0, json.Length);
         }
 
-        public static AnnotationDto ParseJson(string json)
+        public static DataTransferObject ParseJson(string json)
         {
-            var annotationDto = new AnnotationDto();
+            var annotationDto = new DataTransferObject();
             var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             var jsonSerializer = new DataContractJsonSerializer(annotationDto.GetType());
-            annotationDto = jsonSerializer.ReadObject(memoryStream) as AnnotationDto;
+            annotationDto = jsonSerializer.ReadObject(memoryStream) as DataTransferObject;
             memoryStream.Close();
             return annotationDto;
         }

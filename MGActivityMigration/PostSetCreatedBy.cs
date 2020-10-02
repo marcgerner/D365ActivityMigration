@@ -4,13 +4,13 @@ using System;
 
 namespace DeltaN.BusinessSolutions.ActivityMigration
 {
-    public class AnnotationSetCreatedBy : IPlugin
+    public class PostSetCreatedBy : IPlugin
     {
         #region Secure/Unsecure Configuration Setup
         private string _secureConfig = null;
         private string _unsecureConfig = null;
 
-        public AnnotationSetCreatedBy(string unsecureConfig, string secureConfig)
+        public PostSetCreatedBy(string unsecureConfig, string secureConfig)
         {
             _secureConfig = secureConfig;
             _unsecureConfig = unsecureConfig;
@@ -25,15 +25,17 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
 
             try
             {
-                if (context.InputParameters["Target"] is Entity entity && entity.LogicalName == "annotation" && entity.Contains("notetext"))
+                if (context.InputParameters["Target"] is Entity entity && entity.Contains("text"))
                 {
-                    var notetext = (string) entity["notetext"];
-                    if (notetext != null && notetext.StartsWith("{")) //JSON
+                    var text = (string)entity["text"];
+                    if (text != null && text.StartsWith("{")) //JSON
                     {
-                        var annotationDto = DataTransferObject.ParseJson(notetext);
-                        tracer.Trace(notetext);
+                        var annotationDto = DataTransferObject.ParseJson(text);
+                        tracer.Trace(text);
                         entity["createdby"] = new EntityReference("systemuser", annotationDto.createdby);
-                        entity["notetext"] = annotationDto.originalfieldvalue;
+                        entity["modifiedby"] = new EntityReference("systemuser", annotationDto.modifiedby);
+                        entity["modifiedon"] = annotationDto.modifiedon;
+                        entity["text"] = annotationDto.originalfieldvalue;
                     }
                 }
             }

@@ -29,7 +29,7 @@ namespace DeltaN.BusinessSolutions.ActivityMigration
                     var subject = (string)entity["subject"];
                     if (subject != null && subject.StartsWith("{")) //JSON
                     {
-                        var annotationDto = AnnotationDto.ParseJson(subject);
+                        var annotationDto = DataTransferObject.ParseJson(subject);
                         tracer.Trace(subject);
                         entity["modifiedby"] = new EntityReference("systemuser", annotationDto.modifiedby);
                         entity["modifiedon"] = annotationDto.modifiedon;
